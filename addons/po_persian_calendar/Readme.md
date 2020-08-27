@@ -14,7 +14,7 @@ It seems that introducing the concept of 'Calendar', so that a user can select i
 ## Implementation
 First of all we need to bring 'Persian Calendar' support to Moment. We will use [moment-jalali](https://github.com/jalaali/moment-jalaali) which is the Jalaali (Jalali, Persian, Khorshidi, Shamsi) calendar system plugin for moment.js. The plugin will be inserted in web assets with a template like this:
 
-`
+```xml
 <odoo>
     <data>
         <template id="persian_calendar" inherit_id="web.assets_common">
@@ -24,7 +24,7 @@ First of all we need to bring 'Persian Calendar' support to Moment. We will use 
         </template>
     </data>
 </odoo>
-`
+```
 
 
 
