@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<odoo>
+    <data>
+        <template id="persian_calendar" inherit_id="web.assets_common">
+            <xpath expr="//script[@src='/web/static/lib/moment/moment.js']" position="after">
+            	<script type="text/javascript" src="/po_persian_calendar/static/src/js/moment-jalaali.js"></script>
+            </xpath>
+            <xpath expr="//script[@src='/web/static/src/js/core/time.js']" position="after">
+            	<script type="text/javascript" src="/po_persian_calendar/static/src/js/mytime.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>
