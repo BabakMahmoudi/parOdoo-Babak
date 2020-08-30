@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- vim:fdn=3:
+/web/static/lib/tempusdominus/tempusdominus.js
 -->
 <odoo>
     <data>
@@ -10,6 +11,10 @@
             <xpath expr="//script[@src='/web/static/src/js/core/time.js']" position="after">
             	<script type="text/javascript" src="/po_persian_calendar/static/src/js/mytime.js"></script>
             </xpath>
+            <xpath expr="//script[@src='/web/static/lib/tempusdominus/tempusdominus.js']" position="replace">
+            	<script type="text/javascript" src="/po_persian_calendar/static/src/js/tempusdominus_fixed.js"></script>
+            </xpath>
+            
         </template>
     </data>
 </odoo>

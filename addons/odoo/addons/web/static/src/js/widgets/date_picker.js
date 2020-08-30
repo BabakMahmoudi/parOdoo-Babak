@@ -59,6 +59,7 @@ var DateWidget = Widget.extend({
         // datepicker is open or not, so we have to listen to hide/show events
         // and manually keep track of the 'open' state
         this.__isOpen = false;
+        
     },
     /**
      * @override

@@ -727,7 +727,10 @@
     }
     
     function makeDateFromStringAndFormat(config) {
-      var tokens = config._f.match(formattingTokens)
+      /// Babak
+      /// config._f can be a function
+      var __f = typeof config._f ==='function'?config._f():config._f;
+      var tokens = __f.match(formattingTokens)
         , string = config._i + ''
         , len = tokens.length
         , i
@@ -763,7 +766,10 @@
       }
     
       for (i = 0; i < len; i += 1) {
-        format = config._f[i]
+        /// Babak
+        /// format can be a function!
+        /// format = config._f[i]
+        format = typeof config._f[i]=='function'? config._f[i]():config._f[i];
         currentScore = 0
         tempMoment = makeMoment(config._i, format, config._l, config._strict, utc)
     
@@ -860,6 +866,9 @@
         } else {
           date = makeDateFromStringAndFormat(config)
           removeParsedTokens(config)
+          /// Babak
+          /// Could not figure out what this line if for
+          /// so I just commented it!
           format = 'YYYY-MM-DD-' + config._f
           input = leftZeroFill(date[0], 4) + '-'
                 + leftZeroFill(date[1] + 1, 2) + '-'
@@ -880,7 +889,10 @@
         jm._isValid = jm.format(origFormat) === origInput
       }
       if (m._d.getTime() > maxTimestamp) {
-        jm._isValid = false
+        /// Babak
+        /// Follwoing line is commented in order to prevent invalid date
+        /// for date-picker maxDate values.
+        //jm._isValid = false
       }
       return jm
     }
@@ -1008,10 +1020,15 @@
         val = units
         units = temp
       }
-      units = normalizeUnits(units)
-      if (units === 'jyear') {
+      // Babak
+      // This line causes issues 
+      // because it lowercases units and further call to
+      // original moment function will be disturbed.
+      // units = normalizeUnits(units)
+      var _units = normalizeUnits(units)
+      if (_units === 'jyear') {
         this.jYear(this.jYear() + val)
-      } else if (units === 'jmonth') {
+      } else if (_units === 'jmonth') {
         this.jMonth(this.jMonth() + val)
       } else {
         moment.fn.add.call(this, val, units)
@@ -1029,10 +1046,15 @@
         val = units
         units = temp
       }
-      units = normalizeUnits(units)
-      if (units === 'jyear') {
+      /// Babak
+      /// normailze will change case of units
+      /// this will cause issues when calling the
+      /// original subtract.
+
+      var _units = normalizeUnits(units)
+      if (_units === 'jyear') {
         this.jYear(this.jYear() - val)
-      } else if (units === 'jmonth') {
+      } else if (_units === 'jmonth') {
         this.jMonth(this.jMonth() - val)
       } else {
         moment.fn.subtract.call(this, val, units)
@@ -1041,9 +1063,9 @@
     }
     
     jMoment.fn.startOf = function (units) {
-      units = normalizeUnits(units)
-      if (units === 'jyear' || units === 'jmonth') {
-        if (units === 'jyear') {
+      var _units = normalizeUnits(units)
+      if (_units === 'jyear' || _units === 'jmonth') {
+        if (_units === 'jyear') {
           this.jMonth(0)
         }
         this.jDate(1)
@@ -1066,8 +1088,8 @@
     }
     
     jMoment.fn.isSame = function (other, units) {
-      units = normalizeUnits(units)
-      if (units === 'jyear' || units === 'jmonth') {
+      var _units = normalizeUnits(units)
+      if (_units === 'jyear' || _units === 'jmonth') {
         return moment.fn.isSame.call(this.startOf(units), other.startOf(units))
       }
       return moment.fn.isSame.call(this, other, units)
@@ -1106,10 +1128,20 @@
     
     jMoment.jIsLeapYear = jalaali.isLeapJalaaliYear
     
+    jMoment.fixPersian = function(){
+      console.info("fixPersian");
+      fa = moment.localeData('fa');
+      if (fa && typeof fa.$fixed =='undefined'){
+        fa.$fixed = true;
+        fa.postformat = function(s){return s};
+        fa.preparse = function(s){return s};
+      }
+    }
     jMoment.loadPersian = function (args) {
       var usePersianDigits =  args !== undefined && args.hasOwnProperty('usePersianDigits') ? args.usePersianDigits : false
       var dialect =  args !== undefined && args.hasOwnProperty('dialect') ? args.dialect : 'persian'
       moment.locale('fa')
+      console.error("loadPersian");
       moment.updateLocale('fa'
       , { months: ('ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر').split('_')
         , monthsShort: ('ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر').split('_')
@@ -1167,7 +1199,7 @@
             return string
         }
         , postformat: function (string) {
-            if (usePersianDigits) {
+            if (usePersianDigits && false) {
               return string.replace(/\d/g, function (match) {
                 return symbolMap[match]
               }).replace(/,/g, '،')
@@ -1195,6 +1227,7 @@
         }
       )
     }
+    
     
     jMoment.jConvert =  { toJalaali: toJalaali
                         , toGregorian: toGregorian
@@ -1253,5 +1286,7 @@
       this["moment"] = require("moment-jalaali");
     }
     })();
+    //moment.locale("fa");
 
+    //console.log(moment.localeData('fa'));
     console.log( moment().format("jYYYY/jM/jD"))
