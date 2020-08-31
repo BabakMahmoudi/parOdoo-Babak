@@ -6,6 +6,8 @@ Persian Calendar
 ================
 Provides Persian Calendar support in Odoo.
 This is part of parOdoo. ParOdoo is meant to be a place for Odoo localization for Iran.
+People around the world use different calendars. For instance here in Iran we use Persian Calendar (aka [Jalali](https://en.wikipedia.org/wiki/Jalali_calendar)). Unfortunately Odoo misses the concept calendar in its globalization model. Although users can select their prefered language, it is not possible to spceify a prefered calendar. This project aims at providing such a feaure at least for Persian Calendar.
+
 
 Usage:
 =====
@@ -13,8 +15,8 @@ This is still under development.
 
 Technical Notes
 ===============
-People around the world use different calendars. For instance here in Iran we use Persian Calendar (aka [Jalali](https://en.wikipedia.org/wiki/Jalali_calendar)).
-Odoo mainpulation of DateTime data relies on Moment. Unfortunatly Moment lacks the concept of "Calendar",  and its completely clueless to support calendars other than Gregorian, such as the Persian Calendar (also known as Jalali), that's being used in Iran.
+People around the world use different calendars. Odoo implementaion of DateTime data relies on Moment. Unfortunatly Moment lacks the concept of `Calendar`,  and its completely clueless to support calendars other than Gregorian, such as the Persian Calendar (also known as Jalali), that's being used in Iran.
+To add multi-calendar support, without it being considered in the design of the system, is often a tricky task. 
 
 ## Implementation
 First of all we need to bring 'Persian Calendar' support to Moment. We will use [moment-jalali](https://github.com/jalaali/moment-jalaali) which is the Jalaali (Jalali, Persian, Khorshidi, Shamsi) calendar system plugin for moment.js. The plugin will be inserted in web assets with a template like this:
