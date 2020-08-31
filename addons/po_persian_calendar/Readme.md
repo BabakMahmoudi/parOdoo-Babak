@@ -1,3 +1,7 @@
+Release Note:
+============
+This package is still under development and cannot be used.
+
 Persian Calendar
 ================
 Provides Persian Calendar support in Odoo.
@@ -5,11 +9,12 @@ This is part of parOdoo. ParOdoo is meant to be a place for Odoo localization fo
 
 Usage:
 =====
+This is still under development.
 
 Technical Notes
 ===============
-Odoo mainpulation of DateTime data relies on Moment. Unfortunatly Moment lacks the concept of "Calendar", that is often used in other frameworks and its completely clueless to support calendars other than Gregorian, such as the Persian Calendar (also known as Jalali), that's being used in Iran.
-It seems that introducing the concept of 'Calendar', so that a user can select it as her preference, reuires low-level changes in Odoo that may be considered to be out of the scope of our efforts here.
+People around the world use different calendars. For instance here in Iran we use Persian Calendar (aka [Jalali](https://en.wikipedia.org/wiki/Jalali_calendar)).
+Odoo mainpulation of DateTime data relies on Moment. Unfortunatly Moment lacks the concept of "Calendar",  and its completely clueless to support calendars other than Gregorian, such as the Persian Calendar (also known as Jalali), that's being used in Iran.
 
 ## Implementation
 First of all we need to bring 'Persian Calendar' support to Moment. We will use [moment-jalali](https://github.com/jalaali/moment-jalaali) which is the Jalaali (Jalali, Persian, Khorshidi, Shamsi) calendar system plugin for moment.js. The plugin will be inserted in web assets with a template like this:
@@ -93,3 +98,32 @@ Also at the end of 'makeMoment' function, the date is checked against a max valu
         //jm._isValid = false
       }
 ```
+
+## HttpExtensions
+The prefered calendar should be considerd as a user preference , that is the user should be able to select her prefered calendar as one of her prefernces. We will use the recommended method (see (Odoo JavaScript Session)[https://www.odoo.com/documentation/13.0/reference/javascript_reference.html#session]) of transering this sort of settings to the client side using the 'user_context':
+
+```py
+class HttpExtensions(Http):
+    _inherit = 'ir.http'
+
+    def session_info(self):
+        result = super(HttpExtensions, self).session_info()
+        if result and result.get("user_context",False):
+            user_context = result.get("user_context")
+            user = self.env.user
+            # Currently we use the selected language.
+            # TODO: Add calendar to user preferences and
+            # use it here.
+            if user and user.lang=='fa_IR':
+                user_context['calendar']='jalali'
+        return result
+```
+Then the client side can retreive the selected calendar:
+
+```js
+    var session = require('web.session');
+    var calendar = session.user_context.calendar;
+    /// or using odoo global variable:
+    var calendar = odoo.session_info.user_context.calendar
+```
+## TempusDominus.js

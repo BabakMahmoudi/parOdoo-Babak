@@ -2,13 +2,17 @@ odoo.define('web.mytime', function (require) {
     "use strict";
     var core = require('web.core');
     var time = require('web.time');
-    //var utils = require('web.utils');
     var session = require('web.session');
-
     var _t = core._t;
-    //console.info("hi there")
-    //debugger;
-
+    /**
+     * Returns the user prefered calendar code using user_context of
+     * odoo session_info structure. 
+     * The returned code is a single character:
+     * '' or 'g': Gregorian Calendar (Default)
+     * 'j' : Persian Calendar (Jalali)
+     * 'h' : Hijri Calendar (Hijri)
+     * @param {*} user_context 
+     */
     time.getCalendar = function (user_context) {
         user_context = user_context ||
         ( ((typeof odoo == 'undefined' ? {} : odoo).session_info || {}).user_context );

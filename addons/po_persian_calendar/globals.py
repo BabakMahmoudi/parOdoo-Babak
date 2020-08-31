@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from odoo.addons.web.models.ir_http import Http
 else:
     Partner = models.Model
-    IrHttp = models.Model
-    Http = models.Model
+    IrHttp = models.AbstractModel
+    Http = models.AbstractModel
 
 
